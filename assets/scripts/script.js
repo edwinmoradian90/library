@@ -1,113 +1,26 @@
-/*
-========================
-LIBRARY APP 
+let myLibrary = [];
 
-by Edwin Moradian
-========================
-
-
-========================
-Library array for all
-books.
-========================
-*/
-
-let myLibrary = []
-
-/*
-========================
-Library helper functions
-========================
-*/
-
-let saveLibrary = () => {
-    localStorage.setItem('library', JSON.stringify(myLibrary))
-}
-
-let setLibrary = () => {
-    myLibrary = JSON.parse(localStorage.getItem('library')) || []
-}
-
-let haveRead = (read) => {
-    return read = read ? 'Have read' : 'Have not read'
-}
-
-let removeBook = (book_id) => {
-    myLibrary.splice(book_id,1)
-    refresh()
-}
-
-let changeReadStatus = (readId) => {
-    let readStatus = myLibrary[readId].read
-    if(readStatus == 'Have read'){
-        myLibrary[readId].read = 'Have not read'
-    } else {
-        myLibrary[readId].read = 'Have read'
-    }
-    refresh()
-}
-
-/*
-======================
-Book Constructor
-======================
-*/
+const haveRead = (read) => {
+  const didRead = read ? 'Have read' : 'Have not read';
+  return didRead;
+};
 
 function Book(author, title, pages, read) {
-    this.author = author
-    this.title  = title
-    this.pages  = pages
-    this.read   = haveRead(read)
+  this.author = author;
+  this.title = title;
+  this.pages = pages;
+  this.read = haveRead(read);
 }
 
-/*
-=========================
-Creates and add new book
-to user library.
-=========================
-*/
+Book.prototype.info = () => `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`;
 
-function addBookToLibrary() {
-    let title  = document.getElementById('title').value,
-        author = document.getElementById('author').value,
-        pages  = document.getElementById('pages').value,
-        read   = document.getElementById('read').checked,
-        form   = document.getElementById('form'),
-        book = new Book(author, title, pages, read)
-    myLibrary.push(book)
-    saveLibrary()
-    form.reset()
-}
-
-/*
-==========================
-Methods for Book prototype
-==========================
-*/
-
-Book.prototype.info = () => {
-    return `${this.title} by ${this.author}, ${this.pages} pages, ${this.read}`
-}
-
-Book.prototype.delete = () => {
-    console.log('deleted')
-}
-
-
-/*
-=========================
-Render function for 
-displaying books 
-=========================
-*/
-
-function render( books ) {
-    list.innerHTML = ''
-    if(books.length > 0){
-        books.forEach((book, i) => {
-            book.prototype = Object.create(Book.prototype)
-            console.log(book)
-            const content = `
+function render(books) {
+  const list = document.querySelector('#list');
+  list.innerHTML = '';
+  if (books.length > 0) {
+    books.forEach((book, i) => {
+      book.prototype = Object.create(Book.prototype);
+      const content = `
                 <li id=book_${i}>
                   <div class="card is-full">
                     <header class="card-header">
@@ -127,60 +40,75 @@ function render( books ) {
                     </footer>
                   </div>
                 </li><br>
-            `
-            list.innerHTML+= content
-        })
-    }
+            `;
+      list.innerHTML += content;
+    });
+  }
 }
 
-/*
-=======================
-UI refresh function
-It saves, sets, and
-renders the library
-=======================
-*/
+const saveLibrary = () => {
+  localStorage.setItem('library', JSON.stringify(myLibrary));
+};
 
-let refresh = () => {
-    saveLibrary()
-    setLibrary()
-    render( myLibrary )
+const setLibrary = () => {
+  myLibrary = JSON.parse(localStorage.getItem('library')) || [];
+};
+
+const refresh = () => {
+  saveLibrary();
+  setLibrary();
+  render(myLibrary);
+};
+
+function addBookToLibrary() {
+  const title = document.getElementById('title').value;
+  const author = document.getElementById('author').value;
+  const pages = document.getElementById('pages').value;
+  const read = document.getElementById('read').checked;
+  const form = document.getElementById('form');
+  const book = new Book(author, title, pages, read);
+  myLibrary.push(book);
+  saveLibrary();
+  form.reset();
 }
 
-/*
-=======================
-Event listeners
-=======================
-*/
+const removeBook = (bookId) => {
+  myLibrary.splice(bookId, 1);
+  refresh();
+};
 
+const changeReadStatus = (readId) => {
+  const readStatus = myLibrary[readId].read;
+  if (readStatus === 'Have read') {
+    myLibrary[readId].read = 'Have not read';
+  } else {
+    myLibrary[readId].read = 'Have read';
+  }
+  refresh();
+};
+
+const form = document.querySelector('#form');
 form.addEventListener('submit', (e) => {
-    e.preventDefault()
-    addBookToLibrary()
-    render( myLibrary )
-})
+  e.preventDefault();
+  addBookToLibrary();
+  render(myLibrary);
+});
 
 
 window.addEventListener('load', (e) => {
-    e.preventDefault()
-    setLibrary()
-    render( myLibrary )
-    console.log('page loaded')
-})
+  e.preventDefault();
+  setLibrary();
+  render(myLibrary);
+});
 
-window.addEventListener('click', (e) => {   
-    let deleteButton = document.querySelectorAll("a.delete-button")[0]
-    let readStatus   = document.querySelectorAll("a.read-status")[0]
-    if(e.target == deleteButton){
-        removeBook(deleteButton.id)
-    } else if(e.target == readStatus){
-        changeReadStatus(readStatus.id)
-    }
-})
+window.addEventListener('click', (e) => {
+  const deleteButton = document.querySelectorAll('a.delete-button')[0];
+  const readStatus = document.querySelectorAll('a.read-status')[0];
+  if (e.target === deleteButton) {
+    removeBook(deleteButton.id);
+  } else if (e.target === readStatus) {
+    changeReadStatus(readStatus.id);
+  }
+});
 
-/*
-=======================
-Initialize
-=======================
-*/
-
-render( myLibrary )
+render(myLibrary);

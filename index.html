@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,19 +8,20 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <title>Library</title>
 </head>
+
 <body>
     <div class="container">
         <div class="columns">
             <form id="form" class="column is-one-fifth">
                 <label class="label" for="title">Title</label>
-                <input type="text" class="input is-small is-focused" id="title" placeholder="Title">
+                <input type="text" class="input is-small is-focused" id="title" placeholder="Title" required>
 
                 <label class="label" for="title">Author</label>
-                <input type="text" class="input is-small" id="author" placeholder="Author">
+                <input type="text" class="input is-small" id="author" placeholder="Author" required>
 
                 <label class="label" for="title">Number of pages</label>
-                <input type="number" class="input is-small" id="pages" placeholder="Number of pages">
-                
+                <input type="number" class="input is-small" id="pages" placeholder="Number of pages" required>
+
                 <label class="checkbox" for="read"><br>
                     <input type="checkbox" class="" id="read">
                     Read?
@@ -30,7 +32,8 @@
         </div>
 
         <section id="show">
-            <p class="title"> My Library </p><hr>
+            <p class="title"> My Library </p>
+            <hr>
             <ul id="list">
 
             </ul>
